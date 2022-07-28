@@ -1,0 +1,47 @@
+server:
+  port: 8080
+
+eureka:
+  instance:
+    hostname: localhost
+
+logging:
+  level:
+    '[org.springframework.cloud.gateway]': TRACE
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: parcel-order-microservice
+          uri: lb://parcel-order-microservice
+          predicates:
+            - Path=/order/**
+          filters:
+            - AuthenticationFilter
+            -  RewritePath=/order(?<segment>/?.*), $\{segment}
+        - id: parcel-user-microservice
+          uri: lb://parcel-user-microservice
+          predicates:
+            - Path=/auth/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/auth(?<segment>/?.*), $\{segment}
+
+
+jwt:
+  secret: testing
+  validity: 20
+  authDisabled: false
+
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    url: ${server.servlet.contextPath}/v2/api-docs
+    urls:
+      - name: parcel-order-microservice
+        url: /order/v2/api-docs

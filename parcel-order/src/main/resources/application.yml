@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: parcel-order-microservice
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/parcel_order_db
+    username: postgres
+    password: admin
+    hikari:
+      schema: public
+server:
+  port: 8082
+
+  eureka:
+    instance:
+      hostname: localhost
